@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Вход — DriveSpot{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Вход</h1>
+<form method="post" class="card max-w-md mx-auto space-y-4">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-black px-6 py-2 rounded-lg font-semibold">Войти</button>
+</form>
+<p class="text-center mt-4 text-gray-400">Нет аккаунта? <a href="users/register/" class="neon">Создать</a></p>
+{% endblock %}

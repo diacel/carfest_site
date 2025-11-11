@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DriveSpot{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #0d0d0d; color: #e5e5e5; }
+    a { transition: color 0.2s ease; }
+    .neon { color: #00ffff; }
+    .neon:hover { color: #00b3b3; }
+    .card { background: #1a1a1a; border-radius: 1rem; padding: 1rem; box-shadow: 0 0 10px #00ffff33; }
+  </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col">
+  <header class="bg-black bg-opacity-90 p-4 flex justify-between items-center border-b border-gray-800">
+    <a href="/" class="text-2xl font-bold neon">DriveSpot</a>
+    <nav class="space-x-6 text-gray-300">
+      <a href="/" class="hover:neon">Главная</a>
+      {% if user.is_authenticated %}
+        {% if user.is_organizer %}
+          <a href="/create/" class="hover:neon">Создать мероприятие</a>
+        {% endif %}
+        <a href="/users/profile/" class="hover:neon">Профиль</a>
+        <a href="/logout/" class="hover:text-red-500">Выход</a>
+      {% else %}
+        <a href="users/login/" class="hover:neon">Вход</a>
+        <a href="users/register/" class="hover:neon">Регистрация</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="flex-1 p-6 max-w-5xl mx-auto w-full">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="text-center py-4 border-t border-gray-800 text-gray-500">
+    © 2025 DriveSpot. Все права защищены.
+  </footer>
+</body>
+</html>
