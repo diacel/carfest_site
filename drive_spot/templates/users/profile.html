@@ -6,10 +6,13 @@
 <div class="max-w-3xl mx-auto">
   <div class="card flex flex-col md:flex-row items-center gap-6 bg-gray-900 p-6 rounded-xl shadow-lg">
   {% if user_profile.avatar %}
-    <img src="{{ user_profile.avatar.url }}" alt="avatar" class="w-32 h-32 rounded-full border border-cyan-500 object-cover">
+    <img src="{{ user_profile.avatar.url }}" alt="avatar"
+      class="w-32 h-32 rounded-full border border-cyan-500 object-cover">
   {% else %}
-    <img src="{% static 'default_avatar.png' %}" alt="avatar" class="w-32 h-32 rounded-full border border-gray-600 object-cover">
+    <img src="{% static 'users/default_avatar.jpg' %}" alt="avatar"
+      class="w-32 h-32 rounded-full border border-gray-600 object-cover">
   {% endif %}
+
   
   <div>
     <h1 class="text-3xl font-bold">{{ user_profile.username }}</h1>
