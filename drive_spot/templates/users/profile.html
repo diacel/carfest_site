@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{% block title %}Профиль — DriveSpot{% endblock %}
 {% load static %}
+{% block title %}Профиль — DriveSpot{% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto">
@@ -9,7 +9,7 @@
     <img src="{{ user_profile.avatar.url }}" alt="avatar"
       class="w-32 h-32 rounded-full border border-cyan-500 object-cover">
   {% else %}
-    <img src="{% static 'users/default_avatar.jpg' %}" alt="avatar"
+    <img src="{% static 'images/default_avatar.jpg' %}" alt="avatar"
       class="w-32 h-32 rounded-full border border-gray-600 object-cover">
   {% endif %}
 
