@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Вход — DriveSpot{% endblock %}
+
 {% block content %}
-<h1 class="text-2xl font-bold mb-6">Вход</h1>
-<form method="post" class="card max-w-md mx-auto space-y-4">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-black px-6 py-2 rounded-lg font-semibold">Войти</button>
-</form>
-<p class="text-center mt-4 text-gray-400">Нет аккаунта? <a href="users/register/" class="neon">Создать</a></p>
+<div class="max-w-md mx-auto card mt-10">
+
+  <h1 class="text-3xl font-bold text-center mb-6 neon">Вход</h1>
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+
+    <input type="text" name="username" placeholder="Имя пользователя" class="input-field">
+    <input type="password" name="password" placeholder="Пароль" class="input-field">
+
+    <button type="submit" class="btn-primary">Войти</button>
+  </form>
+
+  <p class="text-center mt-4 text-gray-400">
+    Нет аккаунта? <a href="/users/register/" class="neon">Создать</a>
+  </p>
+
+</div>
 {% endblock %}

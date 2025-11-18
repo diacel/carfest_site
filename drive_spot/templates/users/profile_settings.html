@@ -1,12 +1,42 @@
 {% extends 'base.html' %}
-
-{% block title %}Настройки профиля{% endblock %}
+{% block title %}Редактирование профиля — DriveSpot{% endblock %}
 
 {% block content %}
-<h1>Редактирование профиля</h1>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Сохранить</button>
-</form>
+<div class="max-w-xl mx-auto card mt-10">
+  <h1 class="text-3xl font-bold text-center mb-6 neon">Редактирование профиля</h1>
+
+  <form method="post" enctype="multipart/form-data" class="space-y-4">
+    {% csrf_token %}
+
+    <input type="text" name="username" value="{{ user.username }}" placeholder="Имя пользователя"
+           class="input-field">
+
+    <input type="email" name="email" value="{{ user.email }}" placeholder="Email"
+           class="input-field">
+
+    <select name="city" class="input-field">
+      <option value="">Город не выбран</option>
+      {% for c in cities %}
+        <option value="{{ c.id }}" {% if user.city and user.city.id == c.id %}selected{% endif %}>
+          {{ c.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <div>
+      {% if user.avatar %}
+        <img src="{{ user.avatar.url }}" alt="avatar" class="w-24 h-24 rounded-full mb-2 border border-gray-600">
+      {% endif %}
+      <input type="file" name="avatar" class="input-field bg-transparent border-none p-0">
+    </div>
+
+    <textarea name="bio" placeholder="О себе" class="input-field h-32">{{ user.bio }}</textarea>
+
+
+    <input type="text" name="car_info" value="{{ user.car_info }}" placeholder="Информация о машине"
+           class="input-field">
+
+    <button type="submit" class="btn-primary">Сохранить изменения</button>
+  </form>
+</div>
 {% endblock %}

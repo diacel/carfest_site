@@ -4,10 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .forms import CustomUserCreationForm, UserProfileForm
+from users.models import City
 
 User = get_user_model()
 
 def register_view(request):
+    cities = City.objects.all()
+
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -19,7 +22,11 @@ def register_view(request):
             messages.error(request, 'Ошибка при регистрации. Проверь введённые данные.')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'users/register.html', {'form': form})
+
+    return render(request, 'users/register.html', {
+        'form': form,
+        'cities': cities
+    })
 
 
 def login_view(request):
@@ -56,14 +63,18 @@ def my_profile_view(request):
 @login_required
 def profile_settings_view(request):
     user = request.user
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Профиль успешно обновлён!')
-            return redirect('profile', username=user.username)
-        else:
-            messages.error(request, 'Ошибка при обновлении профиля.')
-    else:
-        form = UserProfileForm(instance=user)
-    return render(request, 'users/profile_settings.html', {'form': form})
+    cities = City.objects.all()
+
+    if request.method == "POST":
+        user.username = request.POST.get("username")
+        user.email = request.POST.get("email")
+        user.city_id = request.POST.get("city") or None
+        user.bio = request.POST.get("bio")
+        user.car_info = request.POST.get("car_info")
+
+        if request.FILES.get("avatar"):
+            user.avatar = request.FILES.get("avatar")
+
+        user.save()
+        return redirect("profile")
+    return render(request, "users/profile_settings.html", {"user": user, "cities": cities})
