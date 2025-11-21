@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="meetup-type">{{ meetup.get_meetup_type_display }}</div>
+        <h1 style="color: #00ffff; margin-bottom: 1rem;">{{ meetup.title }}</h1>
+        
+        {% if meetup.image %}
+        <img src="{{ meetup.image.url }}" alt="{{ meetup.title }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 1.5rem;">
+        {% endif %}
+        
+        <div style="margin-bottom: 1.5rem;">
+            <h3 style="color: #00ffff; margin-bottom: 0.5rem;">Описание</h3>
+            <p style="white-space: pre-line;">{{ meetup.description }}</p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <strong>Город:</strong><br>
+                {% if meetup.city == user.city %}
+                    {{ meetup.city.name }} (ваш город)
+                {% else %}
+                    {{ meetup.city.name }}
+                {% endif %}
+            </div>
+            <div>
+                <strong>Адрес:</strong><br>
+                {{ meetup.location }}
+            </div>
+            <div>
+                <strong>Дата и время:</strong><br>
+                {{ meetup.date_time|date:"d.m.Y H:i" }}
+            </div>
+            <div>
+                <strong>👤 Организатор:</strong><br>
+                <a href="{% url 'profile' meetup.organizer.username %}">{{ meetup.organizer.nickname }}</a>
+            </div>
+            <div>
+                <strong>Статус:</strong><br>
+                {% if meetup.is_upcoming %}
+                <span style="color: #00ff00;">Предстоящая</span>
+                {% else %}
+                <span style="color: #ff4444;">Завершена</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <a href="{% url 'home' %}" class="btn-primary" style="text-align: center; display: inline-block; width: auto; padding: 10px 20px;">← Назад к списку</a>
+    </div>
+</div>
+{% endblock %}

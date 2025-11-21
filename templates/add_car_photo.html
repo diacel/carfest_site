@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <h1 style="color: #00ffff; text-align: center; margin-bottom: 2rem;">📸 Добавить фото машины</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; color: #00ffff;">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <small style="color: #777; font-size: 0.8rem;">{{ field.help_text }}</small>
+                {% endif %}
+                {% if field.errors %}
+                <div style="color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem;">
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-primary">Загрузить фото</button>
+        </form>
+        
+        <a href="{% url 'profile' user.username %}" style="display: block; text-align: center; margin-top: 1rem; color: #00ffff;">
+            ← Назад к профилю
+        </a>
+    </div>
+</div>
+{% endblock %}

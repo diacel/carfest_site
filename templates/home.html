@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 style="color: #00ffff; text-align: center; margin-bottom: 2rem; text-shadow: 0 0 15px #00ffff;">
+    {% if user.is_authenticated and user.city and not show_all_cities %}
+        Тусовки в {{ user.city.name }}
+    {% else %}
+        JDM Тусовки
+    {% endif %}
+</h1>
+
+{% if user.is_authenticated and user.city %}
+<div style="text-align: center; margin-bottom: 2rem;">
+    {% if show_all_cities %}
+        <a href="{% url 'toggle_city_filter' %}?show_all=false" class="btn-primary" style="width: auto; padding: 10px 20px; display: inline-flex; align-items: center; gap: 0.5rem;">
+            Показать только {{ user.city.name }}
+        </a>
+    {% else %}
+        <a href="{% url 'toggle_city_filter' %}?show_all=true" class="btn-primary" style="width: auto; padding: 10px 20px; display: inline-flex; align-items: center; gap: 0.5rem; background: #333; color: #00ffff;">
+            Показать все города
+        </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<div class="section-title">Предстоящие тусовки</div>
+{% if upcoming_meetups %}
+    <div class="card-grid">
+        {% for meetup in upcoming_meetups %}
+        <a href="{% url 'meetup_detail' meetup.pk %}" style="text-decoration: none;">
+            <div class="card">
+                <div class="meetup-type">{{ meetup.get_meetup_type_display }}</div>
+                <h3 class="card-title">{{ meetup.title }}</h3>
+                <p><strong>📍 Город:</strong> 
+                    {% if meetup.city == user.city %}
+                        {{ meetup.city.name }}
+                    {% else %}
+                        {{ meetup.city.name }}
+                    {% endif %}
+                </p>
+                <p><strong>Адрес:</strong> {{ meetup.location }}</p>
+                <p><strong>Когда:</strong> {{ meetup.date_time|date:"d.m.Y H:i" }}</p>
+                <p><strong>Организатор:</strong> {{ meetup.organizer.nickname }}</p>
+                {% if meetup.image %}
+                <img src="{{ meetup.image.url }}" alt="{{ meetup.title }}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-top: 1rem;">
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted" style="text-align: center; padding: 2rem;">
+        {% if user.is_authenticated and user.city and not show_all_cities %}
+            В вашем городе пока нет предстоящих тусовок. 
+            <a href="{% url 'toggle_city_filter' %}?show_all=true" style="color: #00ffff;">Посмотреть все города</a>
+        {% else %}
+            Пока нет предстоящих тусовок.
+        {% endif %}
+    </p>
+{% endif %}
+
+<div class="section-title">Прошедшие тусовки</div>
+{% if past_meetups %}
+    <div class="card-grid">
+        {% for meetup in past_meetups %}
+        <a href="{% url 'meetup_detail' meetup.pk %}" style="text-decoration: none;">
+            <div class="card">
+                <div class="meetup-type">{{ meetup.get_meetup_type_display }}</div>
+                <h3 class="card-title">{{ meetup.title }}</h3>
+                <p><strong>Город:</strong> {{ meetup.city.name }}</p>
+                <p><strong>Адрес:</strong> {{ meetup.location }}</p>
+                <p><strong>Когда:</strong> {{ meetup.date_time|date:"d.m.Y H:i" }}</p>
+                <p class="text-muted">Завершено</p>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted" style="text-align: center; padding: 2rem;">
+        {% if user.is_authenticated and user.city and not show_all_cities %}
+            В вашем городе пока нет прошедших тусовок.
+        {% else %}
+            Пока нет прошедших тусовок.
+        {% endif %}
+    </p>
+{% endif %}
+{% endblock %}

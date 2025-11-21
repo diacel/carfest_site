@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="profile-header">
+    {% if profile_user.avatar %}
+        <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="avatar">
+    {% else %}
+        <div class="avatar" style="background: #333; display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+            👤
+        </div>
+    {% endif %}
+    <div>
+        <h1 style="color: #00ffff; display: flex; align-items: center; margin-bottom: 1rem;">
+            {{ profile_user.nickname }}
+            {% if profile_user.is_organizer %}
+                <span class="organizer-badge">ОРГАНИЗАТОР</span>
+            {% endif %}
+        </h1>
+        <p><strong>Имя:</strong> {{ profile_user.real_name|default:"Не указано" }}</p>
+        <p><strong>Город:</strong> {{ profile_user.city.name|default:"Не выбран" }}</p>
+        {% if profile_user.bio %}
+            <p><strong>О себе:</strong> {{ profile_user.bio }}</p>
+        {% endif %}
+        
+        {% if user == profile_user %}
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="{% url 'edit_profile' %}" class="btn-primary" style="width: auto; padding: 10px 20px;">
+                    Редактировать профиль
+                </a>
+                <a href="{% url 'add_car_photo' %}" class="btn-primary" style="width: auto; padding: 10px 20px; background: #333; color: #00ffff;">
+                    Добавить фото машины
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if profile_user.is_organizer and user_meetups %}
+<div class="section-title">Мои тусовки</div>
+<div class="card-grid">
+    {% for meetup in user_meetups %}
+    <a href="{% url 'meetup_detail' meetup.pk %}" style="text-decoration: none;">
+        <div class="card">
+            <div class="meetup-type">{{ meetup.get_meetup_type_display }}</div>
+            <h3 class="card-title">{{ meetup.title }}</h3>
+            <p><strong>Город:</strong> {{ meetup.city.name }}</p>
+            <p><strong>Когда:</strong> {{ meetup.date_time|date:"d.m.Y H:i" }}</p>
+            <p><strong>Статус:</strong> {% if meetup.is_upcoming %}Предстоящая{% else %}Завершена{% endif %}</p>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="section-title">Галерея машин</div>
+{% if profile_user.car_photos.all %}
+    <div class="gallery">
+        {% for photo in profile_user.car_photos.all %}
+            <img src="{{ photo.photo.url }}" alt="Car photo {{ forloop.counter }}">
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted" style="text-align: center; padding: 2rem;">Пока нет фотографий машин.</p>
+{% endif %}
+{% endblock %}
