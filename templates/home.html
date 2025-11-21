@@ -5,7 +5,7 @@
     {% if user.is_authenticated and user.city and not show_all_cities %}
         Тусовки в {{ user.city.name }}
     {% else %}
-        JDM Тусовки
+        Тусовки
     {% endif %}
 </h1>
 
@@ -31,7 +31,7 @@
             <div class="card">
                 <div class="meetup-type">{{ meetup.get_meetup_type_display }}</div>
                 <h3 class="card-title">{{ meetup.title }}</h3>
-                <p><strong>📍 Город:</strong> 
+                <p><strong>Город:</strong> 
                     {% if meetup.city == user.city %}
                         {{ meetup.city.name }}
                     {% else %}
